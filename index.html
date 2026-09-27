@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Programming 1 — Midterm Reviewer</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#11182b; --panel2:#17213a; --text:#eaf0ff;
+  --muted:#9aa8c7; --accent:#62e6a7; --accent2:#72a7ff; --danger:#ff7185;
+  --warning:#ffd166; --border:#273452; --code:#090d17; --shadow:0 18px 50px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(135deg,#080c18,#101a31 55%,#0b1222);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.65}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:rgba(8,12,24,.9);border-right:1px solid var(--border);backdrop-filter:blur(14px);overflow:auto}
+.brand{padding:10px 10px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.brand .terminal{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);font-size:12px}
+.brand h1{font-size:18px;line-height:1.2;margin:7px 0}
+.brand p{font-size:12px;color:var(--muted);margin:0}
+.nav{display:grid;gap:6px}
+.nav button{border:1px solid transparent;background:transparent;color:var(--muted);text-align:left;padding:11px 12px;border-radius:10px;transition:.2s}
+.nav button:hover,.nav button.active{background:var(--panel2);color:var(--text);border-color:var(--border)}
+.nav small{display:block;color:#7180a0;margin-top:2px}
+.progress-box{margin-top:18px;padding:13px;border:1px solid var(--border);background:var(--panel);border-radius:12px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
+.progress{height:8px;background:#202b45;border-radius:99px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.35s}
+main{min-width:0}
+.topbar{position:sticky;top:0;z-index:10;padding:12px 28px;background:rgba(11,16,32,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;justify-content:space-between}
+.search{width:min(480px,55vw);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:9px;outline:none}
+.search:focus{border-color:var(--accent2)}
+.reset{background:transparent;color:var(--muted);border:1px solid var(--border);padding:8px 11px;border-radius:8px}
+.content{max-width:1120px;margin:auto;padding:38px 28px 80px}
+.section{display:none;animation:fade .3s ease}
+.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero{padding:40px;border:1px solid var(--border);background:radial-gradient(circle at 85% 20%,rgba(98,230,167,.12),transparent 35%),linear-gradient(135deg,var(--panel),#0d1528);border-radius:20px;box-shadow:var(--shadow)}
+.eyebrow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);font-size:13px}
+h2{font-size:34px;line-height:1.2;margin:8px 0 12px}
+h3{font-size:23px;margin-top:35px}
+h4{margin-bottom:6px}
+.lead{color:var(--muted);max-width:800px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.card h3,.card h4{margin-top:0}
+.lesson-tag{display:inline-block;padding:4px 8px;border-radius:99px;background:#1c2946;color:var(--accent2);font-size:11px;font-weight:700}
+.objectives{list-style:none;padding:0}
+.objectives li{margin:7px 0}
+.objectives li::before{content:"✓";color:var(--accent);font-weight:700;margin-right:8px}
+.code{position:relative;background:var(--code);border:1px solid #202b43;border-radius:11px;padding:16px 18px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;color:#d8e4ff;white-space:pre}
+.keyword{color:#7fb2ff}.string{color:#ffd58a}.comment{color:#6f809f}.number{color:#bba2ff}
+.copy{position:absolute;right:8px;top:8px;border:1px solid #293650;background:#141d30;color:#aebbd4;border-radius:6px;padding:4px 7px;font-size:11px}
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:11px;margin:15px 0}
+table{width:100%;border-collapse:collapse;background:var(--panel)}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--border)}
+th{color:var(--accent);font-size:13px}
+td{color:#d5ddf1}
+.callout{border-left:4px solid var(--accent);background:rgba(98,230,167,.07);padding:15px 17px;border-radius:0 10px 10px 0;margin:17px 0}
+.warning{border-left-color:var(--warning);background:rgba(255,209,102,.07)}
+.diagram{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:20px 0}
+.diagram .node{padding:12px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;text-align:center}
+.arrow{color:var(--accent);font-weight:bold}
+.remember{border:1px solid rgba(98,230,167,.35);background:linear-gradient(135deg,rgba(98,230,167,.1),rgba(114,167,255,.05));border-radius:13px;padding:18px;margin:22px 0}
+.remember strong{color:var(--accent)}
+.practice{margin-top:25px}
+.question{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:18px;margin:14px 0}
+.question.correct{border-color:var(--accent)} .question.wrong{border-color:var(--danger)}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{background:#151e33;border:1px solid var(--border);color:var(--text);text-align:left;padding:10px 12px;border-radius:8px}
+.option:hover{border-color:var(--accent2)}
+.feedback{margin-top:10px;font-size:13px;color:var(--muted)}
+.quiz-score{font-weight:700;color:var(--accent)}
+.btn{background:var(--accent);color:#06140d;border:0;padding:10px 15px;border-radius:8px;font-weight:800}
+.btn.secondary{background:#1b2945;color:var(--text);border:1px solid var(--border)}
+.btn.danger{background:var(--danger);color:#fff}
+.btnrow{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}
+.flash{font-size:34px;font-weight:900;text-align:center;color:var(--accent);font-family:ui-monospace,monospace}
+.kbd{font-family:ui-monospace,monospace;border:1px solid var(--border);background:#151d31;border-radius:5px;padding:2px 5px}
+.exam-q{padding:19px 0;border-bottom:1px solid var(--border)}
+.exam-q:last-child{border-bottom:0}
+label.exam-opt{display:block;padding:8px 10px;margin:5px 0;border:1px solid transparent;border-radius:8px}
+label.exam-opt:hover{background:#151f35;border-color:var(--border)}
+.result{padding:20px;border:1px solid var(--border);border-radius:13px;background:var(--panel);margin-top:18px}
+.score-big{font-size:48px;font-weight:900;color:var(--accent)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.footer{text-align:center;color:#65728f;padding:35px 0;border-top:1px solid var(--border);margin-top:50px;font-size:12px}
+.hidden{display:none!important}
+@media(max-width:850px){
+ .app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+ .nav{grid-template-columns:repeat(2,1fr)} .topbar{position:relative}.search{width:100%}
+ .content{padding:24px 16px 60px}.hero{padding:26px}h2{font-size:28px}
+}
+@media(max-width:520px){.nav{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="terminal">&gt; study_mode.exe</div>
+    <h1>COMPUTER PROGRAMMING 1</h1>
+    <p>MIDTERM EXAMINATION REVIEWER</p>
+  </div>
+  <nav class="nav" id="nav">
+    <button data-section="overview" class="active">Overview<small>Start here</small></button>
+    <button data-section="lesson1">Lesson 1<small>Introduction to Programming</small></button>
+    <button data-section="lesson2">Lesson 2<small>Basic C++ Structure</small></button>
+    <button data-section="lesson3">Lesson 3<small>Data Types & Variables</small></button>
+    <button data-section="lesson4">Lesson 4<small>Operators</small></button>
+    <button data-section="practice">Practice<small>Topic practice</small></button>
+    <button data-section="exam">Midterm Exam<small>Practice examination</small></button>
+    <button data-section="quick">Quick Review<small>One-page review</small></button>
+  </nav>
+  <div class="progress-box">
+    <div class="progress-row"><span>Study progress</span><b id="progressText">0%</b></div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <div class="progress-row" style="margin-top:8px"><span>Lessons completed</span><span id="completedText">0 / 4</span></div>
+  </div>
+</aside>
+
+<main>
+<header class="topbar">
+  <input id="search" class="search" placeholder="Search the reviewer..." aria-label="Search reviewer">
+  <div class="btnrow" style="margin:0">
+    <button class="reset" id="resetProgress">Reset Progress</button>
+  </div>
+</header>
+
+<div class="content">
+
+<section class="section active" id="overview">
+  <div class="hero">
+    <div class="eyebrow">BEGINNER • OFFLINE • EXAM-FOCUSED</div>
+    <h2>Computer Programming 1<br>Midterm Reviewer</h2>
+    <p class="lead">A focused interactive study guide covering only the four lessons in the provided midterm scope: programming fundamentals, basic C++ structure, data types and variables, and operators.</p>
+    <div class="toolbar">
+      <button class="btn" onclick="showSection('lesson1')">Start Lesson 1 →</button>
+      <button class="btn secondary" onclick="showSection('exam')">Take Practice Exam</button>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:20px">
+    <div class="card"><span class="lesson-tag">LESSON 1</span><h3>Programming</h3><p>Programming, variables, high vs low level languages, and C++ history.</p></div>
+    <div class="card"><span class="lesson-tag">LESSON 2</span><h3>C++ Structure</h3><p><code>#include &lt;iostream&gt;</code>, <code>using namespace std;</code>, <code>main()</code>, <code>cout</code>, and <code>return 0;</code>.</p></div>
+    <div class="card"><span class="lesson-tag">LESSON 3</span><h3>Data & Variables</h3><p>Six basic data types and the rules for declaring variables.</p></div>
+    <div class="card"><span class="lesson-tag">LESSON 4</span><h3>Operators</h3><p>Arithmetic, assignment, comparison, logical, increment/decrement, and pre/post behavior.</p></div>
+  </div>
+  <div class="callout"><strong>How to study:</strong> Read each lesson, answer its practice questions, then use the Midterm Practice Exam. Your progress is saved locally in this browser.</div>
+</section>
+
+<section class="section" id="lesson1">
+  <div class="eyebrow">LESSON 1</div><h2>Introduction to Programming</h2>
+  <p class="lead">Learn what programming means, why variables are used, how programming languages differ, and the key facts about C++ history.</p>
+  <div class="card"><h3>Learning Objectives</h3><ul class="objectives">
+    <li>Define programming and a program.</li><li>Explain how instructions are given to computers.</li><li>Explain variables and their purpose.</li><li>Distinguish high-level and low-level languages.</li><li>Identify the creator and important dates in C++ history.</li>
+  </ul></div>
+
+  <h3>1. What is Programming?</h3>
+  <p><strong>Programming</strong> is the process of writing instructions that tell a computer what to do. A <strong>program</strong> is a set of instructions that a computer can execute to perform a task.</p>
+  <p>Humans describe a problem and create instructions. Those instructions are written as a program, and the computer follows them to produce an output.</p>
+  <div class="diagram"><div class="node">Problem</div><span class="arrow">→</span><div class="node">Instructions</div><span class="arrow">→</span><div class="node">Program</div><span class="arrow">→</span><div class="node">Computer</div><span class="arrow">→</span><div class="node">Output</div></div>
+  <div class="callout"><strong>Real-world analogy:</strong> Think of a recipe. The recipe gives step-by-step instructions, while the person following the recipe is like the computer following a program.</div>
+
+  <h3>2. What are Variables?</h3>
+  <p>A <strong>variable</strong> is a named place used by a program to store information. A variable has a name and a value, and its value can be used or changed while the program runs.</p>
+  <div class="code">int age = 20;<button class="copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="table-wrap"><table><tr><th>Part</th><th>Meaning</th></tr><tr><td><code>int</code></td><td>Data type</td></tr><tr><td><code>age</code></td><td>Variable name</td></tr><tr><td><code>20</code></td><td>Value</td></tr><tr><td><code>=</code></td><td>Assignment</td></tr></table></div>
+
+  <h3>3. Purpose of Variables</h3>
+  <p>Variables allow programs to <strong>store data, use data later, change values, perform calculations,</strong> and work with information provided by the user.</p>
+  <div class="code">int age = 20;
+int score = 95;
+int numberOfStudents = 40;</div>
+  <div class="callout">If <code>score</code> changes from <code>95</code> to <code>100</code>, a calculation or output using <code>score</code> can also change. This is why storing information in variables is useful.</div>
+
+  <h3>4. High-Level vs Low-Level Programming Languages</h3>
+  <p><strong>High-level languages</strong> are designed to be easier for humans to read and write. Examples include C++, Python, Java, and JavaScript.</p>
+  <p><strong>Low-level languages</strong> are closer to computer hardware. Machine language and assembly language are examples.</p>
+  <div class="table-wrap"><table><tr><th>Feature</th><th>High-Level</th><th>Low-Level</th></tr>
+    <tr><td>Human readability</td><td>Easier</td><td>More difficult</td></tr><tr><td>Hardware abstraction</td><td>Higher</td><td>Lower</td></tr><tr><td>Examples</td><td>C++, Python, Java</td><td>Assembly, Machine Code</td></tr><tr><td>Ease of programming</td><td>Generally easier</td><td>Generally harder</td></tr>
+  </table></div>
+
+  <h3>5. Who Created C++?</h3>
+  <div class="grid">
+    <div class="card"><div class="flash">1979</div><p style="text-align:center">Development began</p></div>
+    <div class="card"><div class="flash">1983</div><p style="text-align:center">C++ name adopted</p></div>
+    <div class="card"><h4>Creator</h4><p><strong>Bjarne Stroustrup</strong></p><p>Developed at Bell Labs.</p></div>
+  </div>
+  <div class="remember"><strong>Exam facts:</strong><br>Creator: Bjarne Stroustrup<br>Started: 1979<br>Original name: C with Classes<br>C++ name: 1983<br>Location: Bell Labs<br>It began as an extension of the C programming language.</div>
+  <div class="practice"><h3>Lesson 1 Practice</h3><div id="quiz1"></div></div>
+  <div class="btnrow"><button class="btn" onclick="completeLesson(1)">✓ Mark Lesson 1 Complete</button></div>
+</section>
+
+<section class="section" id="lesson2">
+  <div class="eyebrow">LESSON 2</div><h2>Basic C++ Program Structure</h2>
+  <p class="lead">Understand the purpose of each part of a simple C++ program.</p>
+  <div class="card"><h3>Learning Objectives</h3><ul class="objectives">
+    <li>Explain the purpose of <code>#include &lt;iostream&gt;</code>.</li><li>Explain <code>using namespace std;</code>.</li><li>Explain <code>int main()</code>.</li><li>Use <code>cout</code> to understand output.</li><li>Describe the simple purpose of <code>return 0;</code>.</li>
+  </ul></div>
+  <h3>Basic Structure</h3>
+  <div class="code">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello, World!";
+    return 0;
+}<button class="copy" onclick="copyCode(this)">Copy</button></div>
+
+  <h3>1. <code>#include &lt;iostream&gt;</code></h3>
+  <p><code>#include</code> tells the preprocessor to include a library/header. <code>&lt;iostream&gt;</code> provides standard input/output functionality and is commonly used when working with <code>cout</code>.</p>
+  <div class="diagram"><div class="node"><code>#include &lt;iostream&gt;</code></div><span class="arrow">→</span><div class="node">Input/output functionality</div><span class="arrow">→</span><div class="node">Use <code>cout</code></div></div>
+
+  <h3>2. <code>using namespace std;</code></h3>
+  <p><code>std</code> is the standard namespace. A namespace groups related names. With <code>using namespace std;</code>, you can write <code>cout</code> instead of <code>std::cout</code>.</p>
+  <div class="grid"><div class="card"><h4>Without the using directive</h4><div class="code">std::cout &lt;&lt; "Hello";</div></div><div class="card"><h4>With it</h4><div class="code">using namespace std;
+cout &lt;&lt; "Hello";</div></div></div>
+
+  <h3>3. <code>int main()</code></h3>
+  <p><code>main()</code> is the starting point of a standard C++ program. Program execution begins at <code>main()</code>. The <code>int</code> indicates that <code>main</code> returns an integer value.</p>
+  <div class="diagram"><div class="node">Program starts</div><span class="arrow">→</span><div class="node"><code>main()</code></div><span class="arrow">→</span><div class="node">Statements execute</div><span class="arrow">→</span><div class="node">Program ends</div></div>
+
+  <h3>4. <code>cout</code></h3>
+  <p><code>cout</code> displays output. The <code>&lt;&lt;</code> operator sends the value or text to <code>cout</code>.</p>
+  <div class="grid">
+    <div class="card"><div class="code">cout &lt;&lt; "Hello";</div><p>Output: <strong>Hello</strong></p></div>
+    <div class="card"><div class="code">cout &lt;&lt; 25;</div><p>Output: <strong>25</strong></p></div>
+    <div class="card"><div class="code">cout &lt;&lt; "Age: " &lt;&lt; 20;</div><p>Output: <strong>Age: 20</strong></p></div>
+  </div>
+
+  <h3>5. <code>return 0;</code></h3>
+  <p>In the basic program structure, <code>return 0;</code> ends <code>main()</code> and returns the integer value <code>0</code>.</p>
+  <div class="remember"><strong>Remember:</strong> <code>iostream</code> → input/output functionality; <code>std</code> → standard namespace; <code>main()</code> → starting point; <code>cout</code> → displays output; <code>return 0;</code> → ends <code>main()</code> with 0.</div>
+  <div class="practice"><h3>Lesson 2 Practice</h3><div id="quiz2"></div></div>
+  <div class="btnrow"><button class="btn" onclick="completeLesson(2)">✓ Mark Lesson 2 Complete</button></div>
+</section>
+
+<section class="section" id="lesson3">
+  <div class="eyebrow">LESSON 3</div><h2>Data Types and Variable Declaration</h2>
+  <p class="lead">Learn what a data type tells the computer and how to create valid variable names.</p>
+  <div class="card"><h3>Learning Objectives</h3><ul class="objectives">
+    <li>Define a data type.</li><li>Identify <code>int</code>, <code>char</code>, <code>string</code>, <code>float</code>, <code>double</code>, and <code>bool</code>.</li><li>Distinguish single and double quotes for characters and text.</li><li>Identify valid and invalid variable names.</li>
+  </ul></div>
+  <h3>1. What are Data Types?</h3>
+  <p>A <strong>data type</strong> tells the computer what kind of data a variable will store.</p>
+  <div class="diagram"><div class="node">Data Type</div><span class="arrow">→</span><div class="node">Determines what kind of value<br>a variable can store</div></div>
+
+  <h3>2. Basic C++ Data Types</h3>
+  <div class="grid">
+    <div class="card"><h4><code>int</code></h4><p>Whole numbers.</p><div class="code">int age = 20;
+int score = 95;</div></div>
+    <div class="card"><h4><code>char</code></h4><p>A single character.</p><div class="code">char grade = 'A';</div><p><code>'A'</code> is a character; <code>"A"</code> is text.</p></div>
+    <div class="card"><h4><code>string</code></h4><p>Text or a sequence of characters.</p><div class="code">string name = "Steven";</div><p>Commonly used with <code>#include &lt;string&gt;</code>.</p></div>
+    <div class="card"><h4><code>float</code></h4><p>Decimal numbers using single-precision floating-point representation.</p><div class="code">float temperature = 36.5;</div></div>
+    <div class="card"><h4><code>double</code></h4><p>Decimal numbers with greater precision than <code>float</code>.</p><div class="code">double price = 99.99;</div></div>
+    <div class="card"><h4><code>bool</code></h4><p>Boolean values: <code>true</code> or <code>false</code>.</p><div class="code">bool isStudent = true;</div></div>
+  </div>
+  <div class="table-wrap"><table><tr><th>Data Type</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td><code>int</code></td><td>Whole numbers</td><td><code>20</code></td></tr><tr><td><code>char</code></td><td>Single character</td><td><code>'A'</code></td></tr><tr><td><code>string</code></td><td>Text</td><td><code>"Hello"</code></td></tr><tr><td><code>float</code></td><td>Decimal number</td><td><code>3.14</code></td></tr><tr><td><code>double</code></td><td>Decimal number with greater precision</td><td><code>3.14159</code></td></tr><tr><td><code>bool</code></td><td>True or false</td><td><code>true</code></td></tr>
+  </table></div>
+
+  <h3>3. Rules for Declaring Variables</h3>
+  <ol>
+    <li>A variable name can contain letters, numbers, and underscores.</li>
+    <li>A variable name cannot start with a number.</li>
+    <li>Variable names cannot contain spaces.</li>
+    <li>Variable names cannot use reserved C++ keywords.</li>
+    <li>C++ variable names are case-sensitive.</li>
+    <li>Use meaningful variable names.</li>
+  </ol>
+  <div class="grid">
+    <div class="card"><h4>✓ Valid</h4><div class="code">int age;
+int studentAge;
+int student_age;
+int age2;</div></div>
+    <div class="card"><h4>✗ Invalid</h4><div class="code">int 2age;
+int student age;
+int int;</div><p><code>2age</code> starts with a number; <code>student age</code> has a space; <code>int</code> is a reserved keyword.</p></div>
+  </div>
+  <div class="remember"><strong>Remember:</strong> <code>char</code> uses single quotes, such as <code>'A'</code>. Text strings use double quotes, such as <code>"A"</code> or <code>"Hello"</code>. C++ variable names are case-sensitive.</div>
+  <div class="practice"><h3>Lesson 3 Practice</h3><div id="quiz3"></div></div>
+  <div class="btnrow"><button class="btn" onclick="completeLesson(3)">✓ Mark Lesson 3 Complete</button></div>
+</section>
+
+<section class="section" id="lesson4">
+  <div class="eyebrow">LESSON 4</div><h2>C++ Operators</h2>
+  <p class="lead">Operators perform calculations, assignments, comparisons, logical operations, and value changes.</p>
+  <div class="card"><h3>Learning Objectives</h3><ul class="objectives">
+    <li>Identify arithmetic and assignment operators.</li><li>Distinguish assignment from comparison.</li><li>Use comparison and logical operators.</li><li>Explain increment and decrement.</li><li>Predict pre/post increment and decrement results.</li>
+  </ul></div>
+
+  <h3>1. Arithmetic Operators</h3>
+  <div class="table-wrap"><table><tr><th>Symbol</th><th>Name</th><th>Example</th><th>Result</th></tr>
+    <tr><td><code>+</code></td><td>Addition</td><td><code>10 + 5</code></td><td>15</td></tr><tr><td><code>-</code></td><td>Subtraction</td><td><code>10 - 5</code></td><td>5</td></tr><tr><td><code>*</code></td><td>Multiplication</td><td><code>10 * 5</code></td><td>50</td></tr><tr><td><code>/</code></td><td>Division</td><td><code>10 / 5</code></td><td>2</td></tr><tr><td><code>%</code></td><td>Modulus</td><td><code>10 % 3</code></td><td>1</td></tr>
+  </table></div>
+  <div class="callout warning"><strong>Integer division:</strong> When both operands are integers, division follows integer behavior. For example, <code>10 / 3</code> gives <code>3</code>, not <code>3.333...</code>. The modulus operator <code>%</code> gives the remainder.</div>
+  <div class="code">10 ÷ 3
+
+3 × 3 = 9
+10 - 9 = 1
+
+Remainder = 1</div>
+
+  <h3>2. Assignment Operators</h3>
+  <div class="table-wrap"><table><tr><th>Operator</th><th>Meaning</th><th>Equivalent</th></tr>
+    <tr><td><code>=</code></td><td>Assignment</td><td><code>x = 10</code></td></tr><tr><td><code>+=</code></td><td>Add and assign</td><td><code>x = x + 5</code></td></tr><tr><td><code>-=</code></td><td>Subtract and assign</td><td><code>x = x - 5</code></td></tr><tr><td><code>*=</code></td><td>Multiply and assign</td><td><code>x = x * 5</code></td></tr><tr><td><code>/=</code></td><td>Divide and assign</td><td><code>x = x / 5</code></td></tr><tr><td><code>%=</code></td><td>Remainder and assign</td><td><code>x = x % 5</code></td></tr>
+  </table></div>
+  <div class="code">int x = 10;
+x += 5;  // x is now 15
+x -= 5;  // x is now 10
+x *= 5;  // x is now 50
+x /= 5;  // x is now 10
+x %= 5;  // x is now 0</div>
+
+  <h3>3. Comparison Operators</h3>
+  <p>Comparison operators compare two values and produce a Boolean result: <code>true</code> or <code>false</code>.</p>
+  <div class="table-wrap"><table><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code> → true</td></tr><tr><td><code>!=</code></td><td>Not equal</td><td><code>5 != 10</code> → true</td></tr><tr><td><code>&gt;</code></td><td>Greater than</td><td><code>5 &gt; 10</code> → false</td></tr><tr><td><code>&lt;</code></td><td>Less than</td><td><code>5 &lt; 10</code> → true</td></tr><tr><td><code>&gt;=</code></td><td>Greater than or equal</td><td><code>5 &gt;= 5</code> → true</td></tr><tr><td><code>&lt;=</code></td><td>Less than or equal</td><td><code>5 &lt;= 10</code> → true</td></tr>
+  </table></div>
+  <div class="remember"><strong>Very important:</strong> <code>=</code> means <strong>assignment</strong>. <code>==</code> means <strong>comparison</strong>.</div>
+
+  <h3>4. Logical Operators</h3>
+  <div class="grid">
+    <div class="card"><h4><code>&amp;&amp;</code> AND</h4><p>Both conditions must be true.</p><div class="code">true &amp;&amp; true → true</div></div>
+    <div class="card"><h4><code>||</code> OR</h4><p>At least one condition must be true.</p><div class="code">true || false → true</div></div>
+    <div class="card"><h4><code>!</code> NOT</h4><p>Reverses a Boolean value.</p><div class="code">!true → false</div></div>
+  </div>
+  <div class="grid">
+    <div class="table-wrap"><table><tr><th>A</th><th>B</th><th>A &amp;&amp; B</th></tr><tr><td>false</td><td>false</td><td>false</td></tr><tr><td>false</td><td>true</td><td>false</td></tr><tr><td>true</td><td>false</td><td>false</td></tr><tr><td>true</td><td>true</td><td>true</td></tr></table></div>
+    <div class="table-wrap"><table><tr><th>A</th><th>B</th><th>A || B</th></tr><tr><td>false</td><td>false</td><td>false</td></tr><tr><td>false</td><td>true</td><td>true</td></tr><tr><td>true</td><td>false</td><td>true</td></tr><tr><td>true</td><td>true</td><td>true</td></tr></table></div>
+    <div class="table-wrap"><table><tr><th>A</th><th>!A</th></tr><tr><td>false</td><td>true</td></tr><tr><td>true</td><td>false</td></tr></table></div>
+  </div>
+
+  <h3>5. Increment and Decrement</h3>
+  <div class="grid">
+    <div class="card"><h4><code>++</code> Increment</h4><p>Increases a value by 1.</p><div class="code">x++;
+++x;</div></div>
+    <div class="card"><h4><code>--</code> Decrement</h4><p>Decreases a value by 1.</p><div class="code">x--;
+--x;</div></div>
+  </div>
+
+  <h3>6. Pre-Increment and Post-Increment</h3>
+  <div class="grid">
+    <div class="card"><h4>Post-increment: <code>x++</code></h4><div class="code">int x = 5;
+int y = x++;</div><p><strong>Use first:</strong> y gets 5.<br><strong>Change second:</strong> x becomes 6.</p><p>Final: <code>x = 6</code>, <code>y = 5</code></p></div>
+    <div class="card"><h4>Pre-increment: <code>++x</code></h4><div class="code">int x = 5;
+int y = ++x;</div><p><strong>Change first:</strong> x becomes 6.<br><strong>Use second:</strong> y gets 6.</p><p>Final: <code>x = 6</code>, <code>y = 6</code></p></div>
+  </div>
+
+  <h3>7. Pre-Decrement and Post-Decrement</h3>
+  <div class="grid">
+    <div class="card"><h4>Post-decrement: <code>x--</code></h4><div class="code">int x = 5;
+int y = x--;</div><p>Final: <code>x = 4</code>, <code>y = 5</code></p></div>
+    <div class="card"><h4>Pre-decrement: <code>--x</code></h4><div class="code">int x = 5;
+int y = --x;</div><p>Final: <code>x = 4</code>, <code>y = 4</code></p></div>
+  </div>
+  <div class="remember"><strong>Pre:</strong> change first, use second.<br><strong>Post:</strong> use first, change second.<br><br><code>++x</code> → change first, use second<br><code>x++</code> → use first, change second<br><code>--x</code> → change first, use second<br><code>x--</code> → use first, change second</div>
+  <div class="practice"><h3>Lesson 4 Practice</h3><div id="quiz4"></div></div>
+  <div class="btnrow"><button class="btn" onclick="completeLesson(4)">✓ Mark Lesson 4 Complete</button></div>
+</section>
+
+<section class="section" id="practice">
+  <div class="eyebrow">INTERACTIVE PRACTICE</div><h2>Practice by Topic</h2>
+  <p class="lead">Answer short questions covering the four lessons. Each question gives immediate feedback.</p>
+  <div class="grid" id="topicStats"></div>
+  <div id="allPractice"></div>
+</section>
+
+<section class="section" id="exam">
+  <div class="eyebrow">PRACTICE EXAM</div><h2>Midterm Practice Exam</h2>
+  <p class="lead">This practice exam covers Lessons 1–4 only. It includes multiple choice, true/false, output prediction, code identification, data types, variables, operators, and pre/post increment/decrement.</p>
+  <div class="card"><strong>Tip:</strong> Try answering without looking back at the lessons. Your score is saved locally after submission.</div>
+  <form id="examForm"></form>
+  <div class="btnrow"><button class="btn" type="button" onclick="submitExam()">Submit Practice Exam</button><button class="btn secondary" type="button" onclick="resetExam()">Reset Answers</button></div>
+  <div id="examResult" class="result hidden"></div>
+</section>
+
+<section class="section" id="quick">
+  <div class="eyebrow">ONE-PAGE REVIEW</div><h2>Quick Review</h2>
+  <div class="grid">
+    <div class="card"><h3>Programming</h3><p><strong>Programming</strong> = writing instructions for a computer.</p></div>
+    <div class="card"><h3>C++ History</h3><p>Creator: <strong>Bjarne Stroustrup</strong><br>Development began: <strong>1979</strong><br>Original name: <strong>C with Classes</strong><br>C++ name adopted: <strong>1983</strong><br>Developed at: <strong>Bell Labs</strong></p></div>
+  </div>
+  <h3>Basic C++ Structure</h3>
+  <div class="code">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello";
+    return 0;
+}</div>
+  <h3>Data Types</h3>
+  <div class="table-wrap"><table><tr><th>Type</th><th>Remember</th></tr><tr><td><code>int</code></td><td>whole numbers</td></tr><tr><td><code>char</code></td><td>single character</td></tr><tr><td><code>string</code></td><td>text</td></tr><tr><td><code>float</code></td><td>decimal</td></tr><tr><td><code>double</code></td><td>decimal with greater precision</td></tr><tr><td><code>bool</code></td><td>true/false</td></tr></table></div>
+  <h3>Operators</h3>
+  <div class="table-wrap"><table><tr><th>Symbol</th><th>Meaning</th><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td><code>+</code></td><td>addition</td><td><code>==</code></td><td>equal to</td></tr><tr><td><code>-</code></td><td>subtraction</td><td><code>!=</code></td><td>not equal</td></tr><tr><td><code>*</code></td><td>multiplication</td><td><code>&gt;</code></td><td>greater than</td></tr><tr><td><code>/</code></td><td>division</td><td><code>&lt;</code></td><td>less than</td></tr><tr><td><code>%</code></td><td>remainder</td><td><code>&gt;=</code></td><td>greater than or equal</td></tr><tr><td><code>=</code></td><td>assignment</td><td><code>&lt;=</code></td><td>less than or equal</td></tr><tr><td><code>&amp;&amp;</code></td><td>AND</td><td><code>||</code></td><td>OR</td></tr><tr><td><code>!</code></td><td>NOT</td><td><code>++ / --</code></td><td>increment / decrement</td></tr>
+  </table></div>
+  <div class="remember"><strong>Pre/Post:</strong><br><code>++x</code> → change first, use second<br><code>x++</code> → use first, change second<br><code>--x</code> → change first, use second<br><code>x--</code> → use first, change second</div>
+</section>
+
+<footer class="footer">Computer Programming 1 • Midterm Examination Reviewer • Works offline • Progress is stored only in this browser.</footer>
+</div>
+</main>
+</div>
+
+<script>
+const lessonQuizzes = {
+  1:[
+    {q:"Which statement best describes programming?",opts:["Drawing computer hardware","Writing instructions for a computer","Only designing websites","Repairing a computer"],a:1,e:"Programming is writing instructions that tell a computer what to do."},
+    {q:"What is the purpose of a variable?",opts:["To store information","To turn off the computer","To replace the monitor","To create hardware"],a:0,e:"Variables provide named storage for information used by a program."},
+    {q:"Which is a high-level programming language?",opts:["Machine language","Assembly language","C++","Binary machine code"],a:2,e:"C++ is a high-level language designed to be easier for humans to read and write."},
+    {q:"Who created C++?",opts:["Dennis Ritchie","Bjarne Stroustrup","James Gosling","Guido van Rossum"],a:1,e:"Bjarne Stroustrup created C++."},
+    {q:"What was the original name of C++?",opts:["C Plus","C with Classes","Advanced C","Bell C"],a:1,e:"The language was initially called C with Classes."}
+  ],
+  2:[
+    {q:"What is commonly provided by #include <iostream>?",opts:["Standard input/output functionality","Only graphics","Only variables","A database"],a:0,e:"iostream provides standard input/output functionality and is commonly used with cout."},
+    {q:"What does using namespace std; allow you to write?",opts:["main instead of int","cout instead of std::cout","iostream instead of cout","return instead of main"],a:1,e:"It allows names from the std namespace to be used without writing std:: each time."},
+    {q:"Where does standard C++ program execution begin?",opts:["cout","iostream","main()","return 0"],a:2,e:"Execution begins at main()."},
+    {q:"What is cout used for?",opts:["Displaying output","Declaring variables","Comparing values","Ending a program"],a:0,e:"cout is used to display output."},
+    {q:'What is the output of cout << "Age: " << 20;?',opts:["Age:","20","Age: 20","20 Age:"],a:2,e:"The two output pieces are sent to cout in order: Age: then 20."}
+  ],
+  3:[
+    {q:"What does a data type tell the computer?",opts:["What kind of data a variable will store","Who created C++","Where the program is saved","Which monitor to use"],a:0,e:"A data type determines what kind of value a variable can store."},
+    {q:"Which data type is used for a single character?",opts:["string","char","int","bool"],a:1,e:"char stores a single character, such as 'A'."},
+    {q:'Which is a string?',opts:["'A'","20","true","\"Hello\""],a:3,e:'Text uses double quotes, such as "Hello".'},
+    {q:"Which variable name is valid?",opts:["2age","student age","int","student_age"],a:3,e:"student_age contains allowed characters and does not start with a number or use a keyword."},
+    {q:"Which data type represents true or false?",opts:["double","float","bool","char"],a:2,e:"bool represents Boolean values: true or false."}
+  ],
+  4:[
+    {q:"What is the result of 10 % 3?",opts:["0","1","2","3"],a:1,e:"10 divided by 3 leaves a remainder of 1."},
+    {q:"Which symbol means assignment?",opts:["==","=","!=","<="],a:1,e:"= assigns a value; == compares two values."},
+    {q:"What does && mean?",opts:["OR","NOT","AND","Assignment"],a:2,e:"&& is AND; both conditions must be true."},
+    {q:"What is the result of int x=5; int y=x++;?",opts:["x=5, y=6","x=6, y=5","x=6, y=6","x=5, y=5"],a:1,e:"Post-increment uses the old value first, then increments x."},
+    {q:"What is the result of int x=5; int y=--x;?",opts:["x=4, y=4","x=5, y=4","x=4, y=5","x=5, y=5"],a:0,e:"Pre-decrement changes x first to 4, then y receives 4."}
+  ]
+};
+
+const allQuestions = [
+ {lesson:1,type:"Multiple Choice",q:"A program is best described as:",opts:["A set of instructions a computer can execute","A computer monitor","A programming keyboard","A hardware cable"],a:0,e:"A program is a set of instructions."},
+ {lesson:1,type:"True / False",q:"C++ was created by Bjarne Stroustrup.",opts:["True","False"],a:0,e:"This is true."},
+ {lesson:1,type:"Multiple Choice",q:"C++ development began in:",opts:["1979","1983","1990","2000"],a:0,e:"The provided lesson identifies 1979 as the beginning of development."},
+ {lesson:1,type:"Multiple Choice",q:"Which is low-level?",opts:["Python","C++","Assembly language","JavaScript"],a:2,e:"Assembly language is a low-level language."},
+ {lesson:2,type:"Multiple Choice",q:"Which line is used to include iostream?",opts:["using iostream","#include <iostream>","include iostream","iostream()"],a:1,e:"The basic structure uses #include <iostream>."},
+ {lesson:2,type:"True / False",q:"cout is used to display output.",opts:["True","False"],a:0,e:"cout displays output."},
+ {lesson:2,type:"Multiple Choice",q:"Which is the starting point of a standard C++ program?",opts:["cout","main()","iostream","using namespace"],a:1,e:"Program execution begins at main()."},
+ {lesson:2,type:"Output",q:"What is the output? int x = 5; int y = 2; cout << x + y;",opts:["2","5","7","10"],a:2,e:"5 + 2 = 7."},
+ {lesson:3,type:"Multiple Choice",q:"Which type is suitable for a whole number?",opts:["int","char","bool","string"],a:0,e:"int is used for whole numbers."},
+ {lesson:3,type:"Multiple Choice",q:"Which is a valid declaration?",opts:["int 2age = 20;","int student age = 20;","int age2 = 20;","int int = 20;"],a:2,e:"age2 is valid. The other examples violate variable-name rules."},
+ {lesson:3,type:"True / False",q:"C++ variable names are case-sensitive.",opts:["True","False"],a:0,e:"Uppercase and lowercase letters are distinguished."},
+ {lesson:3,type:"Multiple Choice",q:"Which uses single quotes?",opts:["string text","char grade","double price","bool active"],a:1,e:"A char example is char grade = 'A';."},
+ {lesson:4,type:"Multiple Choice",q:"Which operator gives a remainder?",opts:["/","%","*","+"],a:1,e:"% is the modulus operator and gives the remainder."},
+ {lesson:4,type:"Multiple Choice",q:"Which statement is correct?",opts:["= compares values","== assigns values","= assigns values","!= means equal"],a:2,e:"= is assignment; == is comparison."},
+ {lesson:4,type:"Output",q:"What are the final values? int x=5; int y=++x;",opts:["x=5, y=6","x=6, y=5","x=6, y=6","x=5, y=5"],a:2,e:"Pre-increment changes x to 6 before y receives the value."},
+ {lesson:4,type:"Output",q:"What are the final values? int x=5; int y=x--;",opts:["x=4, y=5","x=5, y=4","x=4, y=4","x=5, y=5"],a:0,e:"Post-decrement uses 5 first, then changes x to 4."},
+ {lesson:4,type:"Multiple Choice",q:"What does !true produce?",opts:["true","false","1","0 only"],a:1,e:"NOT reverses true to false."},
+ {lesson:4,type:"Multiple Choice",q:"What must be true for A && B to be true?",opts:["At least one is true","Both are true","Both are false","A must be false"],a:1,e:"AND requires both conditions to be true."},
+ {lesson:4,type:"Multiple Choice",q:"What must be true for A || B to be true?",opts:["Both must be false","At least one must be true","Both must be true","Neither can be true"],a:1,e:"OR is true when at least one condition is true."}
+];
+
+let state = JSON.parse(localStorage.getItem("cp1MidtermReviewer") || '{"completed":[],"practice":{},"examScore":null}');
+if(!Array.isArray(state.completed)) state.completed=[];
+function save(){localStorage.setItem("cp1MidtermReviewer",JSON.stringify(state)); updateProgress();}
+function updateProgress(){
+ const done=state.completed.length;
+ const pct=Math.round(done/4*100);
+ document.getElementById("progressBar").style.width=pct+"%";
+ document.getElementById("progressText").textContent=pct+"%";
+ document.getElementById("completedText").textContent=done+" / 4";
+}
+function showSection(id){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===id));
+ window.scrollTo({top:0,behavior:"smooth"});
+ if(id==="practice") renderAllPractice();
+}
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
+function completeLesson(n){
+ if(!state.completed.includes(n)){state.completed.push(n);state.completed.sort();save();}
+ const btn=document.querySelector(`#lesson${n} .btn`);
+ if(btn){btn.textContent="✓ Lesson "+n+" Completed";btn.classList.add("secondary")}
+}
+function copyCode(btn){
+ const code=btn.parentElement.innerText.replace("Copy","").trim();
+ navigator.clipboard?.writeText(code);
+ btn.textContent="Copied!";
+ setTimeout(()=>btn.textContent="Copy",1000);
+}
+function renderQuiz(containerId,questions,key){
+ const box=document.getElementById(containerId); if(!box)return;
+ box.innerHTML=questions.map((x,i)=>`<div class="question" id="${key}-${i}">
+   <strong>${i+1}. ${x.q}</strong><div class="options">${x.opts.map((o,j)=>`<button class="option" onclick="answerTopic('${key}',${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join("")}</div>
+   <div class="feedback" id="${key}-f-${i}"></div></div>`).join("");
+}
+function answerTopic(key,i,j){
+ const set=key.startsWith("l1")?lessonQuizzes[1]:key.startsWith("l2")?lessonQuizzes[2]:key.startsWith("l3")?lessonQuizzes[3]:lessonQuizzes[4];
+ const q=set[i], el=document.getElementById(`${key}-${i}`), f=document.getElementById(`${key}-f-${i}`);
+ if(state.practice[key]?.[i]!==undefined)return;
+ if(!state.practice[key])state.practice[key]={};
+ state.practice[key][i]=j;
+ if(j===q.a){el.classList.add("correct");f.innerHTML="<span class='quiz-score'>✓ Correct!</span> "+q.e}else{el.classList.add("wrong");f.innerHTML="<span style='color:var(--danger)'>✗ Incorrect.</span> Correct answer: <strong>"+String.fromCharCode(65+q.a)+". "+q.opts[q.a]+"</strong><br>"+q.e}
+ save();
+}
+function renderAllPractice(){
+ const stats=document.getElementById("topicStats");
+ stats.innerHTML=[1,2,3,4].map(n=>{
+   const total=lessonQuizzes[n].length, ans=Object.keys(state.practice["l"+n]||{}).length;
+   return `<div class="card"><span class="lesson-tag">LESSON ${n}</span><h3>${ans}/${total}</h3><p>questions answered</p></div>`
+ }).join("");
+ document.getElementById("allPractice").innerHTML=allQuestions.map((q,i)=>`
+ <div class="question" id="ap-${i}">
+ <span class="lesson-tag">LESSON ${q.lesson} • ${q.type}</span><p><strong>${i+1}. ${q.q}</strong></p>
+ <div class="options">${q.opts.map((o,j)=>`<button class="option" onclick="answerAll(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join("")}</div>
+ <div class="feedback" id="ap-f-${i}"></div></div>`).join("");
+}
+function answerAll(i,j){
+ const q=allQuestions[i], el=document.getElementById("ap-"+i), f=document.getElementById("ap-f-"+i);
+ const key="all"+i;if(state.practice[key]!==undefined)return;
+ state.practice[key]=j;
+ if(j===q.a){el.classList.add("correct");f.innerHTML="<span class='quiz-score'>✓ Correct!</span> "+q.e}else{el.classList.add("wrong");f.innerHTML="<span style='color:var(--danger)'>✗ Incorrect.</span> Correct answer: <strong>"+String.fromCharCode(65+q.a)+". "+q.opts[q.a]+"</strong><br>"+q.e}
+ save();
+}
+function buildExam(){
+ const form=document.getElementById("examForm");
+ form.innerHTML=allQuestions.map((q,i)=>`<div class="exam-q"><span class="lesson-tag">LESSON ${q.lesson} • ${q.type}</span><p><strong>${i+1}. ${q.q}</strong></p>
+ ${q.opts.map((o,j)=>`<label class="exam-opt"><input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${o}</label>`).join("")}</div>`).join("");
+}
+function submitExam(){
+ let score=0, answered=0;
+ allQuestions.forEach((q,i)=>{
+   const pick=document.querySelector(`input[name="q${i}"]:checked`);
+   if(pick){answered++;if(+pick.value===q.a)score++;}
+ });
+ const pct=Math.round(score/allQuestions.length*100);
+ state.examScore={score,total:allQuestions.length,pct,date:new Date().toISOString()};save();
+ const result=document.getElementById("examResult");result.classList.remove("hidden");
+ result.innerHTML=`<div class="score-big">${score}/${allQuestions.length}</div><p><strong>${pct}%</strong> score • ${answered} answered.</p>
+ <p>${pct>=80?"Good work. Review any missed concepts before the actual exam.":pct>=60?"Keep practicing the questions you missed, especially operator tracing.":"Review the four lessons again, then retake the practice exam."}</p>`;
+ result.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function resetExam(){document.getElementById("examForm").reset();document.getElementById("examResult").classList.add("hidden")}
+document.getElementById("resetProgress").onclick=()=>{
+ if(confirm("Reset all saved lesson, practice, and exam progress?")){localStorage.removeItem("cp1MidtermReviewer");location.reload();}
+};
+document.getElementById("search").addEventListener("input",e=>{
+ const term=e.target.value.trim().toLowerCase();
+ document.querySelectorAll(".section").forEach(sec=>{
+   if(!term)return;
+   const text=sec.innerText.toLowerCase();
+   sec.classList.toggle("active",text.includes(term));
+ });
+ if(term){
+   const hit=[...document.querySelectorAll(".section")].find(s=>s.innerText.toLowerCase().includes(term));
+   if(hit){document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===hit.id));hit.scrollIntoView({behavior:"smooth",block:"start"});}
+ }
+});
+renderQuiz("quiz1",lessonQuizzes[1],"l1");
+renderQuiz("quiz2",lessonQuizzes[2],"l2");
+renderQuiz("quiz3",lessonQuizzes[3],"l3");
+renderQuiz("quiz4",lessonQuizzes[4],"l4");
+buildExam();
+updateProgress();
+[1,2,3,4].forEach(n=>{if(state.completed.includes(n)){const b=document.querySelector(`#lesson${n} .btn`);if(b){b.textContent="✓ Lesson "+n+" Completed";b.classList.add("secondary")}}});
+</script>
+</body>
+</html>
